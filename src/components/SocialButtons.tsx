@@ -1,22 +1,22 @@
 import { Button, ButtonProps } from '@mantine/core';
-import { } from "@tabler/icons"
+import { IconBrandGoogle, IconBrandGithub } from "@tabler/icons"
 
 export function GoogleButton(props: ButtonProps) {
-  return <Button leftIcon={< />} variant="default" color="gray" {...props} />;
+  return <Button
+    leftIcon={<IconBrandGoogle />}
+    variant="outline"
+    color="red"
+    {...props}
+  />;
 }
 
 export function GithubButton(props: ButtonProps) {
   return (
     <Button
+      variant="outline"
+      leftIcon={<IconBrandGithub />}
+      color="teal"
       {...props}
-      leftIcon={<GithubIcon size={16} />}
-      sx={(theme) => ({
-        backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
-        color: '#fff',
-        '&:hover': {
-          backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
-        },
-      })}
     />
   );
 }

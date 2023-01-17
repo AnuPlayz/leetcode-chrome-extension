@@ -7,6 +7,7 @@
     "@mantine/core": "^5.10.1",
     "@mantine/form": "^5.10.1",
     "@mantine/hooks": "^5.10.1",
+    "@mantine/notifications": "^5.10.1",
     "@reduxjs/toolkit": "^1.9.1",
     "@tabler/icons": "^1.119.0",
     "@testing-library/jest-dom": "^5.14.1",
@@ -16,6 +17,7 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "firebase": "^9.15.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
@@ -25,7 +27,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
