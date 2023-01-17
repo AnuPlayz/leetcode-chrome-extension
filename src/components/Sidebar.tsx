@@ -57,8 +57,9 @@ export function Sidebar({ page, setPage }: any) {
   const links = mockdata.map((link, index) => (
     <NavbarLink
       {...link}
-      active={page === mockdata[index].label}
+      active={page == link.label}
       key={link.label}
+      onClick={() => setPage(link.label)}
     />
   ));
 
