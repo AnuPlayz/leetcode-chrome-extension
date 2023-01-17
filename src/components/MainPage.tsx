@@ -2,12 +2,22 @@ import { useEffect, useState } from "react"
 import { Flex } from "@mantine/core"
 import { Sidebar } from "./Sidebar"
 import Swal from "sweetalert2"
-import { useAppSelector } from "../hooks"
+import { useAppDispatch, useAppSelector } from "../hooks"
 import { getDoc, getFirestore, doc, collection, updateDoc, setDoc } from "firebase/firestore"
+import { TableScrollArea } from "./Problems"
+import { getProblems } from "../API"
+import { setProblemsData } from "../store"
 
 const MainPage = () => {
     const [page, setPage] = useState("Problems")
     const account = useAppSelector(state => state.account)
+    const dispatch = useAppDispatch()
+
+    const getPBs = async () => {
+        if(!account.uid) return;
+        let problems = await getProblems(account.uid)
+        dispatch(setProblemsData(problems))
+    }
 
     useEffect(() => {
         if (!account.uid) return;
@@ -36,6 +46,7 @@ const MainPage = () => {
                                 username: username,
                                 uid: uid,
                             });
+                            getPBs()
                         }
                     })
                 }
@@ -60,6 +71,7 @@ const MainPage = () => {
                             username: username,
                             uid: uid,
                         });
+                        getPBs()
                     }
                 })
             }
@@ -70,11 +82,13 @@ const MainPage = () => {
         <Sidebar page setPage={setPage} />
 
         {page === "Problems" && <Flex dir="column" style={{ width: "100%" }}>
-            <h1>ur life is full of problems</h1>
+            {account.problemsData && <>
+                <TableScrollArea data={account.problemsData} />
+            </>}
         </Flex>}
 
         {page === "Leaderboard" && <Flex dir="column" style={{ width: "100%" }}>
-            <h1>Leaderboard</h1>
+            <h1>Leaderboard - Soon</h1>
         </Flex>}
     </Flex>
 }
