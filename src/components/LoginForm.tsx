@@ -23,7 +23,14 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { collection, getDoc, getFirestore } from "firebase/firestore"
+import {
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+  updateDoc,
+  setDoc
+} from "firebase/firestore";
 import { useAppDispatch } from "../hooks";
 import { setUid } from "../store";
 import { showNotification } from "@mantine/notifications";
@@ -62,8 +69,9 @@ export function LoginForm(props: PaperProps) {
     }).catch((error) => {
       console.log(error);
       showNotification({
-        title: "Error:",
-        message: error,
+        title: "Error: "+error.code,
+        message: error.message,
+        color: 'red',
       });
     });
   };
@@ -78,8 +86,9 @@ export function LoginForm(props: PaperProps) {
     }).catch((error) => {
       console.log(error);
       showNotification({
-        title: "Error:",
-        message: error,
+        title: "Error: "+error.code,
+        message: error.message,
+        color: 'red',
       });
     });
   };
@@ -94,8 +103,9 @@ export function LoginForm(props: PaperProps) {
     }).catch((error) => {
       console.log(error);
       showNotification({
-        title: "Error:",
-        message: error,
+        title: "Error: "+error.code,
+        message: error.message,
+        color: 'red',
       });
     });
   };
@@ -104,27 +114,41 @@ export function LoginForm(props: PaperProps) {
     let { email, password, name } = form.values;
 
     createUserWithEmailAndPassword(getAuth(), email, password).then(
-      (result) => {
+      async (result) => {
         const user = result.user;
         dispatch(setUid(user.uid));
 
         //find the user doc and save username to it
         const db = getFirestore();
-        const userDoc = collection(db, "users", user.uid);
-        getDoc(userDoc).then((doc) => {
-          if (doc.exists()) {
-            console.log("Document data:", doc.data());
-          } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-          }
-        })
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+
+          const userRef = collection(db, "users");
+          const userDoc = doc(userRef, user.uid);
+          await updateDoc(userDoc, {
+            username: name,
+            uid: user.uid,
+          });
+        } else {
+          console.log("No such document!");
+          const userRef = collection(db, "users");
+          const userDoc = doc(userRef, user.uid);
+          
+          await setDoc(userDoc, {
+            username: name,
+            uid: user.uid,
+          });
+        }
       },
     ).catch((error) => {
       console.log(error);
       showNotification({
-        title: "Error:",
-        message: error,
+        title: "Error: "+error.code,
+        message: error.message,
+        color: 'red',
       });
     });
   };
