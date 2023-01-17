@@ -3,7 +3,7 @@ import { Flex } from "@mantine/core"
 import { Sidebar } from "./Sidebar"
 import Swal from "sweetalert2"
 import { useAppSelector } from "../hooks"
-import { getDoc, getFirestore, doc, collection, updateDoc } from "firebase/firestore"
+import { getDoc, getFirestore, doc, collection, updateDoc, setDoc } from "firebase/firestore"
 
 const MainPage = () => {
     const [page, setPage] = useState("Problems")
@@ -13,7 +13,7 @@ const MainPage = () => {
         if (!account.uid) return;
         const db = getFirestore();
         const docRef = doc(db, "users", account.uid);
-        const docSnap = getDoc(docRef).then((d) => {
+        getDoc(docRef).then((d) => {
             if (d.exists()) {
                 let data = d.data()
                 let uid = data.uid
@@ -39,6 +39,29 @@ const MainPage = () => {
                         }
                     })
                 }
+            } else {
+                let uid = account.uid as string;
+
+                Swal.fire({
+                    title: 'Submit your Leetcode username',
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
+                    showCancelButton: false,
+                    confirmButtonText: 'Set username',
+                    showLoaderOnConfirm: true,
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        let username = result.value
+                        const userRef = collection(db, "users");
+                        const userDoc = doc(userRef, uid);
+                        await setDoc(userDoc, {
+                            username: username,
+                            uid: uid,
+                        });
+                    }
+                })
             }
         })
     }, [])
