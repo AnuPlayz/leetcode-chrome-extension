@@ -83,6 +83,7 @@ const MainPage = () => {
 
         {page === "Problems" && <Flex dir="column" style={{ width: "100%" }}>
             {account.problemsData && <>
+                <h1>Problems: </h1>
                 <TableScrollArea data={account.problemsData} />
             </>}
         </Flex>}
