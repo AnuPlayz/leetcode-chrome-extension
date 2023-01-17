@@ -1,6 +1,7 @@
 import React from 'react'
 import { useAppSelector } from './hooks';
 import LoginForm from './components/LoginForm'
+import MainPage from "./components/MainPage"
 
 function App() {
   const account = useAppSelector(state => state.account);
@@ -12,9 +13,7 @@ function App() {
       margin: "0 auto",
     }}>
       {account.uid ? (
-        <div>
-          <p>Logged in as {account.uid}</p>
-        </div>
+        <MainPage/>
       ) : (
         <LoginForm />
       )}

@@ -17,6 +17,10 @@ const accountSlice = createSlice({
         },
         setProblemsData(state, action) {
             state.problemsData = action.payload;
+        },
+        removeUid(state) {
+            localStorage.removeItem("uid");
+            state.uid = null;
         }
     }
 });
